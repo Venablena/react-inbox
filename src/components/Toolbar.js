@@ -1,10 +1,10 @@
 import React from 'react'
 
-const Toolbar = ({}) => (
+const Toolbar = ({msg}) => (
   <div className="row toolbar">
     <div className="col-md-12">
       <p className="pull-right">
-        <span className="badge badge">2</span>
+        <span>{ msg.filter(el => !el.read).length } </span>
         unread messages
       </p>
 
@@ -40,5 +40,9 @@ const Toolbar = ({}) => (
     </div>
   </div>
 );
+
+const unread = ({msg}) => (
+  msg.filter(el => el.read)
+)
 
 export default Toolbar

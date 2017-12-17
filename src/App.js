@@ -77,7 +77,7 @@ class App extends Component {
           <h1 className="App-title">Welcome to my React inbox</h1>
         </header>
         <div className="container">
-          <Toolbar />
+          <Toolbar msg = { data }/>
           <MessageList msg = { data }/>
         </div>
       </div>

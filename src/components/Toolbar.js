@@ -8,7 +8,7 @@ const Toolbar = ({msg}) => (
         unread messages
       </p>
 
-      <button className="btn btn-default">
+      <button className="btn btn-default" onClick = {selectAll} >
         <i className="fa fa-square-o"></i>
       </button>
 
@@ -41,8 +41,15 @@ const Toolbar = ({msg}) => (
   </div>
 );
 
-const unread = ({msg}) => (
-  msg.filter(el => el.read)
-)
+function selectAll(e){
+  if(e.target.className === "fa fa-square-o") {
+    e.target.className = "fa fa-check-square-o"
+    document.querySelectorAll(".message").forEach(el => el.classList.add("selected"))
+  }
+  else {
+    e.target.className = "fa fa-square-o"
+    document.querySelectorAll(".message").forEach(el => el.classList.remove("selected"))
+  }
+}
 
 export default Toolbar

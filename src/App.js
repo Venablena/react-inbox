@@ -5,8 +5,8 @@ import 'font-awesome/css/font-awesome.css';
 import './index.css';
 
 import Toolbar from './components/Toolbar.js'
-//import MessageList from './components/MessageList.js'
-import Message from './components/Message.js'
+import MessageList from './components/MessageList.js'
+//import Message from './components/Message.js'
 
 const data = [
   {
@@ -78,7 +78,7 @@ class App extends Component {
         </header>
         <div className="container">
           <Toolbar />
-          <Message />
+          <MessageList msg = { data }/>
         </div>
       </div>
     );

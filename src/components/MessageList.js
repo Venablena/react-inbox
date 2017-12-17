@@ -1,8 +1,8 @@
 import React from 'react'
-//import Message from './components/Message.js'
+import Message from './Message.js'
 
-// const MessageList = ({msg}) => (
-//   msg.data.map(el => <Message msg = {el} />)
-// )
+const MessageList = ({msg}) => (
+  msg.map(el => <Message key = {el.id} msg = {el} />)
+)
 
 export default MessageList

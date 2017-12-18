@@ -1,10 +1,6 @@
 import React from 'react'
 
-const Message = ({msg, select, selection}) => {
-  const stars = () => {
-    console.log(msg);
-    msg.starred ? msg.starred = false : msg.starred = true
-  }
+const Message = ({msg, setStars, selection}) => {
 
   return (
     <div className = {
@@ -14,9 +10,9 @@ const Message = ({msg, select, selection}) => {
         <input type="checkbox" value = {msg.id} />
       </div>
       <div className="col-xs-2">
-        <i className= {
+        <i onClick={()=>{ setStars(msg.id) }} className= {
           msg.starred ? "star fa fa-star" : "star fa fa-star-o"
-        } onClick={stars}></i>
+        }></i>
       </div>
 
     <div className="col-xs-8">

@@ -72,20 +72,25 @@ const data = [
 class App extends Component {
   constructor(props){
     super(props)
-    this.state = {selection: []}
+    this.state = {selection: data}
   }
 
-  selectPost = (post) => {
+  change = (post) => {
     this.setState({
       selection: [
         post,
         ...this.state.selection
       ]
     })
+  }
 
-    // setStar = (post) => {
-    //
-    // }
+  setStars = (messageId) => {
+    const posts = this.state.selection
+    const match = posts.find(el => el.id === messageId)
+    match.starred ? match.starred = false : match.starred = true
+    const newSelection = [...posts.slice(0, posts.indexOf(match)), match, ...posts.slice(posts.indexOf(match)+1)]
+
+    this.setState({selection:newSelection})
   }
 
   render() {
@@ -95,8 +100,8 @@ class App extends Component {
           <h1 className="App-title">Welcome to my React inbox</h1>
         </header>
         <div className="container">
-          <Toolbar msg = {data} select = {this.selectPost} selection = {this.state.selection}/>
-          <MessageList msg = { data }/>
+          <Toolbar msg = {this.state.selection} change = {this.change} />
+          <MessageList msg = {this.state.selection} setStars={this.setStars} selection={this.state.selection}/>
         </div>
       </div>
     );

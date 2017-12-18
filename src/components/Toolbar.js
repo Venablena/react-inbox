@@ -1,6 +1,6 @@
 import React from 'react'
 
-const Toolbar = ({msg, select, selection}) => {
+const Toolbar = ({msg, change, selection}) => {
   const selectAll = (e) => {
     changeAppearance(e)
     //select(msg.find(el => el.id ===));

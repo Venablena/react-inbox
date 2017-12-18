@@ -70,6 +70,20 @@ const data = [
 ]
 
 class App extends Component {
+  constructor(props){
+    super(props)
+    this.state = {selection: []}
+  }
+
+  selectPost = (post) => {
+    this.setState({
+      selected: [
+        post,
+        ...this.state.selection
+      ]
+    })
+  }
+
   render() {
     return (
       <div className="App">
@@ -77,7 +91,7 @@ class App extends Component {
           <h1 className="App-title">Welcome to my React inbox</h1>
         </header>
         <div className="container">
-          <Toolbar msg = { data }/>
+          <Toolbar msg = {data} select = {this.state.selectPost} selection = {this.state.selecion}/>
           <MessageList msg = { data }/>
         </div>
       </div>

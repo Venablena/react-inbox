@@ -3,11 +3,13 @@ import React from 'react'
 const Toolbar = ({msg, select, selection}) => {
   const selectAll = (e) => {
     changeAppearance(e)
+    //select(msg.find(el => el.id ===));
+    console.log(e.target);
     // document.querySelectorAll("input[type=checkbox]").forEach(
     //   el => select({el})
     // )
   }
-  
+
   return (
     <div className="row toolbar">
       <div className="col-md-12">

@@ -77,11 +77,15 @@ class App extends Component {
 
   selectPost = (post) => {
     this.setState({
-      selected: [
+      selection: [
         post,
         ...this.state.selection
       ]
     })
+
+    // setStar = (post) => {
+    //
+    // }
   }
 
   render() {
@@ -91,7 +95,7 @@ class App extends Component {
           <h1 className="App-title">Welcome to my React inbox</h1>
         </header>
         <div className="container">
-          <Toolbar msg = {data} select = {this.state.selectPost} selection = {this.state.selecion}/>
+          <Toolbar msg = {data} select = {this.selectPost} selection = {this.state.selection}/>
           <MessageList msg = { data }/>
         </div>
       </div>

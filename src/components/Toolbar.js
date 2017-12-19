@@ -18,7 +18,8 @@ const selectValues = (msg) => {
 }
 
 const Toolbar = ({msg, markRead, trash, checkAll}) => {
- console.log(msg.filter(el => el.checked).every(el => el.read))
+ console.log(msg.filter(el => el.checked).every(el => el.labels.length))
+ selectValues(msg)
   return (
     <div className="row toolbar">
       <div className="col-md-12">
@@ -41,14 +42,14 @@ const Toolbar = ({msg, markRead, trash, checkAll}) => {
           Mark As Unread
         </button>
 
-        <select className="form-control label-select">
+        <select className="form-control label-select" disabled = {!msg.some(el => el.checked)}>
           <option>Apply label</option>
           <option value="dev">dev</option>
           <option value="personal">personal</option>
           <option value="gschool">gschool</option>
         </select>
 
-        <select className="form-control label-select">
+        <select className="form-control label-select" disabled = {msg.filter(el => el.checked).every(el => !el.labels.length)}>
           <option>Remove label</option>
           <option value="dev">dev</option>
           <option value="personal">personal</option>

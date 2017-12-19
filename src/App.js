@@ -85,7 +85,6 @@ class App extends Component {
   }
 
   check = (msgId, action) => {
-    console.log(action);
     const posts = this.state.selection
     const match = posts.find(el => el.id === msgId)
     match[action] ? match[action] = false : match[action] = true

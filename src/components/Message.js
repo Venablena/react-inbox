@@ -1,13 +1,18 @@
 import React from 'react'
 
+function rowName(msg){
+  let name = "row message"
+  msg.read ? name =  `${name} read` : name = `${name} unread`
+  msg.checked ? name = `${name} selected`: name = `${name}`
+
+  return name
+}
+
 const Message = ({msg, check, selection}) => {
   return (
-    <div className = {
-      msg.read ? "row message read" : "row message unread"
-    }>
+    <div  className= {rowName(msg)}>
       <div className="col-xs-2">
-        <input type="checkbox" onChange= {()=>{check(msg.id, "checked")}}
-        }/>
+      <input type="checkbox" onChange= {()=>{check(msg.id, "checked")}}/>
       </div>
       <div className="col-xs-2">
         <i onClick={()=>{check(msg.id, "starred")}} className= {
@@ -24,6 +29,5 @@ const Message = ({msg, check, selection}) => {
   </div>
   );
 }
- function(){}
 
 export default Message

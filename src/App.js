@@ -86,8 +86,9 @@ class App extends Component {
 
   enableBtns = () => {
     const buttons = document.querySelectorAll('.selector')
-    const isDefault = !this.state.selection.some(el => el.checked)
-    buttons.forEach(el => el.disabled = isDefault)
+    const isDefault = this.state.selection.some(el => el.checked)
+    buttons.forEach(el => el.disabled = !isDefault)
+
   }
 
   trash = (msgId) => {

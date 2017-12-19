@@ -81,15 +81,15 @@ class App extends Component {
     match[action] ? match[action] = false : match[action] = true
     const newSelection = [...posts.slice(0, posts.indexOf(match)), match, ...posts.slice(posts.indexOf(match)+1)]
     this.setState({selection:newSelection})
-    this.enableBtns()
+    //this.enableBtns()
   }
 
-  enableBtns = () => {
-    const buttons = document.querySelectorAll('.selector')
-    const isDefault = this.state.selection.some(el => el.checked)
-    buttons.forEach(el => el.disabled = !isDefault)
-
-  }
+  // enableBtns = () => {
+  //   const buttons = document.querySelectorAll('.selector')
+  //   const isDefault = this.state.selection.some(el => el.checked)
+  //   buttons.forEach(el => el.disabled = !isDefault)
+  //
+  // }
 
   trash = (msgId) => {
     const posts = Object.assign({}, this.state)
@@ -116,7 +116,7 @@ class App extends Component {
           <h1 className="App-title">Welcome to my React inbox</h1>
         </header>
         <div className="container">
-          <Toolbar msg = {this.state.selection} trash = {this.trash} markRead = {this.markRead} checkAll = {this.allChecked}/>
+          <Toolbar msg = {this.state.selection} trash = {this.trash} markRead = {this.markRead} checkAll = {this.allChecked} />
           <MessageList msg = {this.state.selection} check = {this.check} selection = {this.state.selection} />
         </div>
       </div>

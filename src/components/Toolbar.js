@@ -12,7 +12,13 @@ const checkboxState = (msg) => {
   else return "fa fa-square-o"
 }
 
+const selectValues = (msg) => {
+  const selected = msg.filter(el => el.checked)
+  selected.forEach(el => console.log(el.labels))
+}
+
 const Toolbar = ({msg, markRead, trash, checkAll}) => {
+ console.log(msg.filter(el => el.checked).every(el => el.read))
   return (
     <div className="row toolbar">
       <div className="col-md-12">
@@ -26,29 +32,30 @@ const Toolbar = ({msg, markRead, trash, checkAll}) => {
           </i>
         </button>
 
-        <button className="btn btn-default selector" onClick = {()=>{markRead(true)}}>
+        <button className="btn btn-default" onClick = {()=>{markRead(true)}}
+        disabled = {msg.filter(el => el.checked).every(el => el.read)}>
           Mark As Read
         </button>
 
-        <button className="btn btn-default selector" onClick = {()=>{markRead(false)}}>
+        <button className="btn btn-default" onClick = {()=>{markRead(false)}} disabled = {msg.filter(el => el.checked).every(el => !el.read)}>
           Mark As Unread
         </button>
 
-        <select className="form-control label-select selector">
+        <select className="form-control label-select">
           <option>Apply label</option>
           <option value="dev">dev</option>
           <option value="personal">personal</option>
           <option value="gschool">gschool</option>
         </select>
 
-        <select className="form-control label-select selector">
+        <select className="form-control label-select">
           <option>Remove label</option>
           <option value="dev">dev</option>
           <option value="personal">personal</option>
           <option value="gschool">gschool</option>
         </select>
 
-        <button className="btn btn-default selector" onClick = {()=>{trash(msg.id)}}>
+        <button className="btn btn-default" onClick = {()=>{trash(msg.id)}} disabled = {!msg.some(el => el.checked)}>
           <i className="fa fa-trash-o"></i>
         </button>
       </div>

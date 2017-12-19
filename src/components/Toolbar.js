@@ -1,14 +1,16 @@
 import React from 'react'
 
-const Toolbar = ({msg, change, selection}) => {
+const Toolbar = ({msg, selection}) => {
   const selectAll = (e) => {
     changeAppearance(e)
     //select(msg.find(el => el.id ===));
-    console.log(e.target);
+
     // document.querySelectorAll("input[type=checkbox]").forEach(
     //   el => select({el})
     // )
   }
+
+  
 
   return (
     <div className="row toolbar">

@@ -75,21 +75,19 @@ class App extends Component {
     this.state = {selection: data}
   }
 
-  change = (post) => {
-    this.setState({
-      selection: [
-        post,
-        ...this.state.selection
-      ]
-    })
-  }
-
   check = (msgId, action) => {
     const posts = this.state.selection
     const match = posts.find(el => el.id === msgId)
     match[action] ? match[action] = false : match[action] = true
     const newSelection = [...posts.slice(0, posts.indexOf(match)), match, ...posts.slice(posts.indexOf(match)+1)]
     this.setState({selection:newSelection})
+    this.enableBtns()
+  }
+
+  enableBtns = () => {
+    const buttons = document.querySelectorAll('.selector')
+    const isDefault = !this.state.selection.some(el => el.checked)
+    buttons.forEach(el => el.disabled = isDefault)
   }
 
   render() {

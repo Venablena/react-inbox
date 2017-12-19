@@ -6,7 +6,6 @@ import './index.css';
 
 import Toolbar from './components/Toolbar.js'
 import MessageList from './components/MessageList.js'
-//import Message from './components/Message.js'
 
 const data = [
   {
@@ -72,6 +71,7 @@ const data = [
 class App extends Component {
   constructor(props){
     super(props)
+    data.map(el => el.checked = false)
     this.state = {selection: data}
   }
 
@@ -84,12 +84,12 @@ class App extends Component {
     })
   }
 
-  setStars = (messageId) => {
+  check = (msgId, action) => {
+    console.log(action);
     const posts = this.state.selection
-    const match = posts.find(el => el.id === messageId)
-    match.starred ? match.starred = false : match.starred = true
+    const match = posts.find(el => el.id === msgId)
+    match[action] ? match[action] = false : match[action] = true
     const newSelection = [...posts.slice(0, posts.indexOf(match)), match, ...posts.slice(posts.indexOf(match)+1)]
-
     this.setState({selection:newSelection})
   }
 
@@ -101,7 +101,7 @@ class App extends Component {
         </header>
         <div className="container">
           <Toolbar msg = {this.state.selection} change = {this.change} />
-          <MessageList msg = {this.state.selection} setStars={this.setStars} selection={this.state.selection}/>
+          <MessageList msg = {this.state.selection} check={this.check} selection={this.state.selection} />
         </div>
       </div>
     );

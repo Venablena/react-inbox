@@ -1,16 +1,16 @@
 import React from 'react'
 
-const Message = ({msg, setStars, selection}) => {
-
+const Message = ({msg, check, selection}) => {
   return (
     <div className = {
       msg.read ? "row message read" : "row message unread"
     }>
       <div className="col-xs-2">
-        <input type="checkbox" value = {msg.id} />
+        <input type="checkbox" onChange= {()=>{check(msg.id, "checked")}}
+        }/>
       </div>
       <div className="col-xs-2">
-        <i onClick={()=>{ setStars(msg.id) }} className= {
+        <i onClick={()=>{check(msg.id, "starred")}} className= {
           msg.starred ? "star fa fa-star" : "star fa fa-star-o"
         }></i>
       </div>
@@ -24,5 +24,6 @@ const Message = ({msg, setStars, selection}) => {
   </div>
   );
 }
+ function(){}
 
 export default Message

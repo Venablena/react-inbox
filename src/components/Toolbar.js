@@ -1,7 +1,6 @@
 import React from 'react'
 
 const Toolbar = ({msg, markRead, markUnread, trash, checkAll}) => {
-
   return (
     <div className="row toolbar">
       <div className="col-md-12">

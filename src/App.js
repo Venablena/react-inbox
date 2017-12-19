@@ -91,21 +91,23 @@ class App extends Component {
   }
 
   trash = (msgId) => {
-    console.log("trash");
-    const posts = this.state.selection
-    const checked = this.posts.filter(el => el.checked)
-    const newSelection = checked.forEach(el => [...posts.slice(0, posts.indexOf(el)), ...posts.slice(posts.indexOf(el)+1)])
-    this.setState({selection:newSelection})
+    const posts = Object.assign({}, this.state)
+    let {selection} = posts
+    const checked = selection.filter(el => el.checked)
+    checked.forEach(el => selection.splice(selection.indexOf(el),1))
+    this.setState({selection:selection})
     this.enableBtns()
   }
 
   markRead = (msgId) => {
+    console.log("read")
     let posts = Object.assign({}, this.state)
     posts.selection.filter(el => el.checked && el.id === msgId).map(el => el.read = true)
     this.setState(posts)
   }
 
   markUnread = (msgId) => {
+    console.log("unread")
     let posts = Object.assign({}, this.state)
     posts.selection.filter(el => el.checked && el.id === msgId).map(el => el.read = false)
     this.setState(posts)

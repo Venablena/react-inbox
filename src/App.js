@@ -92,24 +92,13 @@ class App extends Component {
 
   trash = (msgId) => {
     const posts = Object.assign({}, this.state)
-    let {selection} = posts
-    const checked = selection.filter(el => el.checked)
-    checked.forEach(el => selection.splice(selection.indexOf(el),1))
-    this.setState({selection:selection})
-    this.enableBtns()
-  }
-
-  markRead = (msgId) => {
-    console.log("read")
-    let posts = Object.assign({}, this.state)
-    posts.selection.filter(el => el.checked && el.id === msgId).map(el => el.read = true)
+    posts.selection.filter(el => el.checked).forEach(el => posts.selection.splice(posts.selection.indexOf(el),1))
     this.setState(posts)
   }
 
-  markUnread = (msgId) => {
-    console.log("unread")
+  markRead = (value) => {
     let posts = Object.assign({}, this.state)
-    posts.selection.filter(el => el.checked && el.id === msgId).map(el => el.read = false)
+    posts.selection.filter(el => el.checked).map(el => el.read = value)
     this.setState(posts)
   }
 
@@ -126,7 +115,7 @@ class App extends Component {
           <h1 className="App-title">Welcome to my React inbox</h1>
         </header>
         <div className="container">
-          <Toolbar msg = {this.state.selection} trash = {this.trash} markRead = {this.markRead} markUnread = {this.markUnread} checkAll = {this.allChecked}/>
+          <Toolbar msg = {this.state.selection} trash = {this.trash} markRead = {this.markRead} checkAll = {this.allChecked}/>
           <MessageList msg = {this.state.selection} check = {this.check} selection = {this.state.selection} />
         </div>
       </div>

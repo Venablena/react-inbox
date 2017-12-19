@@ -1,23 +1,28 @@
 import React from 'react'
 
-const Toolbar = ({msg, markRead, markUnread, trash, checkAll}) => {
+function howManyNew(msg){
+  const num = msg.filter(el => !el.read).length
+  if (num === 1)return num + " new message"
+  else return num + "  new messages"
+}
+
+const Toolbar = ({msg, markRead, trash, checkAll}) => {
   return (
     <div className="row toolbar">
       <div className="col-md-12">
         <p className="pull-right">
-          <span>{ msg.filter(el => !el.read).length } </span>
-          unread messages
+          <span> {howManyNew(msg)} </span>
         </p>
 
         <button className="btn btn-default">
           <i className="fa fa-square-o" onClick = {checkAll}></i>
         </button>
 
-        <button className="btn btn-default selector" onClick = {()=>{markRead(msg.id)}}>
+        <button className="btn btn-default selector" onClick = {()=>{markRead(true)}}>
           Mark As Read
         </button>
 
-        <button className="btn btn-default selector" onClick = {()=>{markUnread(msg.id)}}>
+        <button className="btn btn-default selector" onClick = {()=>{markRead(false)}}>
           Mark As Unread
         </button>
 

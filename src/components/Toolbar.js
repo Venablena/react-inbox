@@ -18,7 +18,7 @@ const selectValues = (msg) => {
 }
 
 const Toolbar = ({msg, markRead, trash, checkAll}) => {
- console.log(msg.filter(el => el.checked).every(el => el.labels.length))
+
  selectValues(msg)
   return (
     <div className="row toolbar">

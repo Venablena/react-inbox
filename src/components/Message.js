@@ -1,29 +1,33 @@
 import React from 'react'
 
-function rowName(msg){
+const rowName = (msg) => {
   let name = "row message"
   msg.read ? name =  `${name} read` : name = `${name} unread`
   msg.checked ? name = `${name} selected`: name = `${name}`
-
   return name
 }
 
 const Message = ({msg, check, selection}) => {
+
   return (
     <div  className= {rowName(msg)}>
-      <div className="col-xs-2">
-      <input type="checkbox"
-        onChange= {()=>{check(msg.id, "checked")}}
-        checked = {msg.checked}
-        />
+      <div className ="col-1">
+        <div className = "row">
+          <div className="col-6">
+            <input type="checkbox"
+              onChange= {()=>{check(msg.id, "checked")}}
+              checked = {msg.checked}
+              />
+          </div>
+          <div className="col-6">
+            <i onClick={()=>{check(msg.id, "starred")}}
+              className= {msg.starred ? "star fa fa-star" : "star fa fa-star-o" }>
+            </i>
+          </div>
+        </div>
       </div>
-      <div className="col-xs-2">
-        <i onClick={()=>{check(msg.id, "starred")}}
-          className= { msg.starred ? "star fa fa-star" : "star fa fa-star-o" }>
-        </i>
-      </div>
-
-    <div className="col-xs-8">
+    <div className="col-11">
+      {msg.labels.map((label, i)=> <span key={i} className="badge badge-warning">{label}</span>)}
       <a href="#">
         {msg.subject}
       </a>

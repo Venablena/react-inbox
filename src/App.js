@@ -101,12 +101,6 @@ class App extends Component {
     this.setState(posts)
   }
 
-  addLabels = (arr) => {
-    return arr.map((label, i) => {
-      return <span key={ i } className="label label-warning">{ label }</span>
-    })
-  }
-
   render() {
     return (
       <div className="App">
@@ -126,7 +120,7 @@ class App extends Component {
         </div>
       </div>
     );
-  }
+  }  
 }
 
 export default App;

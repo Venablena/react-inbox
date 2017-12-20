@@ -49,7 +49,7 @@ const Toolbar = ({msg, markRead, trash, checkAll}) => {
           <option value="gschool">gschool</option>
         </select>
 
-        <select className="form-control label-select" disabled = {msg.filter(el => el.checked).every(el => !el.labels.length)}>
+        <select className="form-control label-select" disabled={msg.filter(el => el.checked).every(el => !el.labels.length)} onClick={selectValues}>
           <option>Remove label</option>
           <option value="dev">dev</option>
           <option value="personal">personal</option>

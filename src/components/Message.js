@@ -7,7 +7,7 @@ const rowName = (msg) => {
   return name
 }
 
-const Message = ({msg, check, selection}) => {
+const Message = ({msg, check}) => {
 
   return (
     <div  className= {rowName(msg)}>

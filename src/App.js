@@ -101,6 +101,23 @@ class App extends Component {
     this.setState(posts)
   }
 
+  removeLabels = (e) => {
+    let posts = Object.assign({}, this.state)
+    posts.selection.filter(el => el.checked).forEach(el => {
+      const idx = el.labels.indexOf(e.target.value)
+      if(idx >= 0)el.labels.splice(idx, 1)
+    })
+    this.setState(posts)
+  }
+
+  addLabels = (e) => {
+    let posts = Object.assign({}, this.state)
+    posts.selection.filter(el => el.checked).forEach(el => {
+      if(!el.labels.includes(e.target.value))el.labels.push(e.target.value)
+    })
+    this.setState(posts)
+  }
+
   render() {
     return (
       <div className="App">
@@ -112,15 +129,17 @@ class App extends Component {
             msg = {this.state.selection}
             trash = {this.trash}
             markRead = {this.markRead}
-            checkAll = {this.allChecked} />
+            checkAll = {this.allChecked}
+            removeLabels = {this.removeLabels}
+            addLabels = {this.addLabels} />
           <MessageList
             msg = {this.state.selection}
             check = {this.check}
-            selection = {this.state.selection} />
+            />
         </div>
       </div>
     );
-  }  
+  }
 }
 
 export default App;

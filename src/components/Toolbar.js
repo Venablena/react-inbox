@@ -1,30 +1,19 @@
 import React from 'react'
 
-const howManyNew = (msg) => {
-  const num = msg.filter(el => !el.read).length
-  if (num === 1)return num + " new message"
-  else return num + "  new messages"
-}
-
 const checkboxState = (msg) => {
   if(msg.every(el => el.checked)) return "fa fa-check-square-o"
   if(msg.some(el => el.checked)) return "fa fa-minus-square-o"
   else return "fa fa-square-o"
 }
 
-const selectValues = (msg) => {
-  const selected = msg.filter(el => el.checked)
-  selected.forEach(el => console.log(el.labels))
-}
+const Toolbar = ({msg, markRead, trash, checkAll, removeLabels, addLabels}) => {
 
-const Toolbar = ({msg, markRead, trash, checkAll}) => {
-
- selectValues(msg)
   return (
     <div className="row toolbar">
       <div className="col-md-12">
         <p className="pull-right">
-          <span> {howManyNew(msg)} </span>
+          <span className="badge badge-default"> {msg.filter(el => !el.read).length} </span>
+          {msg.filter(el => !el.read).length === 1 ? "new message" : "new messages"}
         </p>
 
         <button className="btn btn-default">
@@ -42,14 +31,14 @@ const Toolbar = ({msg, markRead, trash, checkAll}) => {
           Mark As Unread
         </button>
 
-        <select className="form-control label-select" disabled = {!msg.some(el => el.checked)}>
+        <select className="form-control label-select" disabled = {!msg.some(el => el.checked)} onChange={addLabels}>
           <option>Apply label</option>
           <option value="dev">dev</option>
           <option value="personal">personal</option>
           <option value="gschool">gschool</option>
         </select>
 
-        <select className="form-control label-select" disabled={msg.filter(el => el.checked).every(el => !el.labels.length)} onClick={selectValues}>
+        <select className="form-control label-select" disabled={msg.filter(el => el.checked).every(el => !el.labels.length)} onChange={removeLabels}>
           <option>Remove label</option>
           <option value="dev">dev</option>
           <option value="personal">personal</option>

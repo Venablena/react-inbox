@@ -29,8 +29,9 @@ class App extends Component {
   trash = async (msgId) => {
     //copy current state
     const posts = Object.assign({}, this.state)
-
-    console.log(posts.selection.filter(el => el.checked).map(el => el.id));
+    //remove all selected posts
+    posts.selection.filter(el => el.checked).forEach(el =>{ posts.selection.splice(posts.selection.indexOf(el),1)
+    })
     //remove from database
     await fetch(API, {
       method: 'PATCH',
@@ -42,9 +43,6 @@ class App extends Component {
         "messageIds": posts.selection.filter(el => el.checked).map(el => el.id),
         "command": "delete"
       })
-    })
-    //remove all selected posts
-    posts.selection.filter(el => el.checked).forEach(el =>{ posts.selection.splice(posts.selection.indexOf(el),1)
     })
   //update state
     this.setState(posts)

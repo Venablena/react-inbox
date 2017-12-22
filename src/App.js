@@ -15,18 +15,21 @@ class App extends Component {
     this.state = {selection: []}
   }
 
+  allChecked = () => {
+    let posts = Object.assign({}, this.state)
+    posts.selection.every(el => el.checked) ? posts.selection.map(el => el.checked = false) : posts.selection.map(el => el.checked = true)
+    this.setState(posts)
+  }
+
   check = (msgId, action) => {
-    //update state
     const posts = this.state.selection
     const match = posts.find(el => el.id === msgId)
     match[action] ? match[action] = false : match[action] = true
     const newSelection = [...posts.slice(0, posts.indexOf(match)), match, ...posts.slice(posts.indexOf(match)+1)]
-
-    //re-render & set state
     this.setState({selection:newSelection})
   }
 
-  trash = async (msgId) => {
+  trash = async(msgId) => {
     //copy current state
     const posts = Object.assign({}, this.state)
     //remove all selected posts
@@ -48,31 +51,61 @@ class App extends Component {
     this.setState(posts)
   }
 
-  markRead = (value) => {
+  markRead = async(value) => {
     let posts = Object.assign({}, this.state)
     posts.selection.filter(el => el.checked).map(el => el.read = value)
+    await fetch(API, {
+      method: 'PATCH',
+      headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      },
+      body: JSON.stringify({
+        "messageIds": posts.selection.filter(el => el.checked).map(el => el.id),
+        "command": "read",
+        "read": "true"
+      })
+    })
     this.setState(posts)
   }
 
-  allChecked = () => {
-    let posts = Object.assign({}, this.state)
-    posts.selection.every(el => el.checked) ? posts.selection.map(el => el.checked = false) : posts.selection.map(el => el.checked = true)
-    this.setState(posts)
-  }
-
-  removeLabels = (e) => {
+  removeLabels = async(e) => {
     let posts = Object.assign({}, this.state)
     posts.selection.filter(el => el.checked).forEach(el => {
       const idx = el.labels.indexOf(e.target.value)
       if(idx >= 0)el.labels.splice(idx, 1)
     })
+    await fetch(API, {
+      method: 'PATCH',
+      headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      },
+      body: JSON.stringify({
+        "messageIds": posts.selection.filter(el => el.checked).map(el => el.id),
+        "command": "removeLabel",
+        "label": e.target.value
+      })
+    })
     this.setState(posts)
   }
 
-  addLabels = (e) => {
+  addLabels = async(e) => {
     let posts = Object.assign({}, this.state)
     posts.selection.filter(el => el.checked).forEach(el => {
       if(!el.labels.includes(e.target.value))el.labels.push(e.target.value)
+    })
+    await fetch(API, {
+      method: 'PATCH',
+      headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      },
+      body: JSON.stringify({
+        "messageIds": posts.selection.filter(el => el.checked).map(el => el.id),
+        "command": "addLabel",
+        "label": e.target.value
+      })
     })
     this.setState(posts)
   }

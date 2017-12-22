@@ -26,12 +26,27 @@ class App extends Component {
     this.setState({selection:newSelection})
   }
 
-  trash = (msgId) => {
-    //update state
+  trash = async (msgId) => {
+    //copy current state
     const posts = Object.assign({}, this.state)
-    posts.selection.filter(el => el.checked).forEach(el => posts.selection.splice(posts.selection.indexOf(el),1))
-    //update database
-    //await fetch()
+
+    console.log(posts.selection.filter(el => el.checked).map(el => el.id));
+    //remove from database
+    await fetch(API, {
+      method: 'PATCH',
+      headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      },
+      body: JSON.stringify({
+        "messageIds": posts.selection.filter(el => el.checked).map(el => el.id),
+        "command": "delete"
+      })
+    })
+    //remove all selected posts
+    posts.selection.filter(el => el.checked).forEach(el =>{ posts.selection.splice(posts.selection.indexOf(el),1)
+    })
+  //update state
     this.setState(posts)
   }
 

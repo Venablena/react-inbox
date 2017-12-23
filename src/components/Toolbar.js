@@ -16,6 +16,10 @@ const Toolbar = ({msg, markRead, trash, checkAll, removeLabels, addLabels}) => {
           {msg.filter(el => !el.read).length === 1 ? "new message" : "new messages"}
         </p>
 
+        <a className="btn btn-danger">
+         <i className="fa fa-plus"></i>
+       </a>
+
         <button className="btn btn-default">
           <i className={checkboxState(msg)}
             onClick={checkAll}>

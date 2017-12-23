@@ -27,26 +27,15 @@ class App extends Component {
     this.setState(posts)
   }
 
-  check = async(msgId, action) => {
+  check = (msgId, action) => {
     const posts = this.state.selection
-    //find a post t
+    //find a post
     const match = posts.find(el => el.id === msgId)
     //mark it checked/unchecked OR read/unread
     match[action] ? match[action] = false : match[action] = true
-    //update on the server:
+    //update on the server(only if starred):
     if(match && action === "starred"){
-      await fetch(API, {
-        method: 'PATCH',
-        headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-        },
-        body: JSON.stringify({
-          "messageIds": [msgId],
-          "command": "star",
-          "star": match[action]
-        })
-      })
+      this.updateDb([msgId], "star", {"star": match[action]})
     }
     //update state:
     const newSelection = [...posts.slice(0, posts.indexOf(match)), match, ...posts.slice(posts.indexOf(match)+1)]
@@ -57,91 +46,66 @@ class App extends Component {
   trash = async(msgId) => {
     //copy current state
     const posts = Object.assign({}, this.state)
-    //remove all selected posts
+    //remove all selected posts from the db
+    const id = this.state.selection.filter(el => el.checked).map(el => el.id)
+    this.updateDb(id, "delete")
+    //remove all selected posts from the state
     posts.selection.filter(el => el.checked).forEach(el =>{ posts.selection.splice(posts.selection.indexOf(el),1)
     })
-    //remove from database
-    await fetch(API, {
-      method: 'PATCH',
-      headers: {
-      'Content-Type': 'application/json',
-      'Accept': 'application/json',
-      },
-      body: JSON.stringify({
-        "messageIds": posts.selection.filter(el => el.checked).map(el => el.id),
-        "command": "delete"
-      })
-    })
-  //update state
+    //update state
     this.setState(posts)
   }
 
-  markRead = async(value) => {
+  markRead = (value) => {
     let posts = Object.assign({}, this.state)
     posts.selection.filter(el => el.checked).map(el => el.read = value)
-    await fetch(API, {
-      method: 'PATCH',
-      headers: {
-      'Content-Type': 'application/json',
-      'Accept': 'application/json',
-      },
-      body: JSON.stringify({
-        "messageIds": posts.selection.filter(el => el.checked).map(el => el.id),
-        "command": "read",
-        "read": "true"
-      })
-    })
+    const id = this.state.selection.filter(el => el.checked).map(el => el.id)
+    this.updateDb(id, "read", {"read": value})
     this.setState(posts)
   }
 
-  removeLabels = async(e) => {
+  removeLabels = (e) => {
     let posts = Object.assign({}, this.state)
     posts.selection.filter(el => el.checked).forEach(el => {
       const idx = el.labels.indexOf(e.target.value)
       if(idx >= 0)el.labels.splice(idx, 1)
     })
-    await fetch(API, {
-      method: 'PATCH',
-      headers: {
-      'Content-Type': 'application/json',
-      'Accept': 'application/json',
-      },
-      body: JSON.stringify({
-        "messageIds": posts.selection.filter(el => el.checked).map(el => el.id),
-        "command": "removeLabel",
-        "label": e.target.value
-      })
-    })
+    const id = this.state.selection.filter(el => el.checked).map(el => el.id)
+    this.updateDb(id, "removeLabel", {"label": e.target.value})
     this.setState(posts)
   }
 
-  addLabels = async(e) => {
+  addLabels = (e) => {
     let posts = Object.assign({}, this.state)
     posts.selection.filter(el => el.checked).forEach(el => {
       if(!el.labels.includes(e.target.value))el.labels.push(e.target.value)
     })
+    const id = this.state.selection.filter(el => el.checked).map(el => el.id)
+    this.updateDb(id, "addLabel", {"label": e.target.value})
+    this.setState(posts)
+  }
+
+  async updateDb(id, command, value){
+    let body = {
+      "messageIds": id,
+      "command": command
+    }
+    if(command !== "delete") body = Object.assign({}, body, value)
+    console.log(body);
     await fetch(API, {
       method: 'PATCH',
       headers: {
       'Content-Type': 'application/json',
       'Accept': 'application/json',
       },
-      body: JSON.stringify({
-        "messageIds": posts.selection.filter(el => el.checked).map(el => el.id),
-        "command": "addLabel",
-        "label": e.target.value
-      })
+      body: JSON.stringify(body)
     })
-    this.setState(posts)
   }
 
   async componentDidMount(){
     const posts = await fetch(API)
     const response = await posts.json()
-    const data = response._embedded.messages.map(el => {
-      const {id, subject, read, starred, labels} = el
-        return {id, subject, read, starred, labels}
-    })
+    const data = response._embedded.messages
     data.map(el => el.checked = false)
     this.setState({selection: data})
   }

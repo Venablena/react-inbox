@@ -28,7 +28,7 @@ const Message = ({msg, check}) => {
       </div>
     <div className="col-11">
       {msg.labels.map((label, i)=> <span key={i} className="badge badge-warning">{label}</span>)}
-      <a href="#">
+      <a href={msg._links.self}>
         {msg.subject}
       </a>
     </div>

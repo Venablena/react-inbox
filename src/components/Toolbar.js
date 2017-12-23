@@ -6,7 +6,9 @@ const checkboxState = (msg) => {
   else return "fa fa-square-o"
 }
 
-const Toolbar = ({msg, markRead, trash, checkAll, removeLabels, addLabels}) => {
+
+
+const Toolbar = ({msg, markRead, trash, checkAll, removeLabels, addLabels, compose}) => {
 
   return (
     <div className="row toolbar">
@@ -16,7 +18,7 @@ const Toolbar = ({msg, markRead, trash, checkAll, removeLabels, addLabels}) => {
           {msg.filter(el => !el.read).length === 1 ? "new message" : "new messages"}
         </p>
 
-        <a className="btn btn-danger">
+        <a className="btn btn-danger" onClick={compose}>
          <i className="fa fa-plus"></i>
        </a>
 

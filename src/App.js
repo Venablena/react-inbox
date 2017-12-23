@@ -19,6 +19,10 @@ class App extends Component {
     }
   }
 
+  enableCompose = () => {
+    this.state.compose ? this.setState({compose: false}) : this.setState({compose: true})
+  }
+
   composeMsg = async(e) => {
     e.preventDefault()
     const subject = e.target.subject.value
@@ -35,6 +39,8 @@ class App extends Component {
       const newMsg = await response.json()
       const posts = Object.assign({}, this.state)
       posts.selection.push(newMsg)
+      posts.compose = false
+      console.log(this.state);
       this.setState(posts)
     }
   }
@@ -153,8 +159,11 @@ class App extends Component {
             markRead = {this.markRead}
             checkAll = {this.allChecked}
             removeLabels = {this.removeLabels}
-            addLabels = {this.addLabels} />
-          <ComposeMsg composeMsg = {this.composeMsg}/>
+            addLabels = {this.addLabels}
+            compose = {this.enableCompose}/>
+          <ComposeMsg
+            composeMsg = {this.composeMsg}
+            isActive = {this.state.compose}/>
           <MessageList
             msg = {this.state.selection}
             check = {this.check}

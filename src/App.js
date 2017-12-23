@@ -13,12 +13,30 @@ const API = 'http://localhost:8082/api/messages'
 class App extends Component {
   constructor(props){
     super(props)
-    this.state = {selection: []}
+    this.state = {
+      selection: [],
+      compose: false
+    }
   }
 
-  newMsg = (e) => {
+  composeMsg = async(e) => {
     e.preventDefault()
-    console.log(e.target)
+    const subject = e.target.subject.value
+    const body = e.target.subject.value
+    if(subject && body){
+      const response = await fetch(API, {
+        method: 'POST',
+        headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        },
+        body: JSON.stringify({subject, body})
+      })
+      const newMsg = await response.json()
+      const posts = Object.assign({}, this.state)
+      posts.selection.push(newMsg)
+      this.setState(posts)
+    }
   }
 
   allChecked = () => {
@@ -136,7 +154,7 @@ class App extends Component {
             checkAll = {this.allChecked}
             removeLabels = {this.removeLabels}
             addLabels = {this.addLabels} />
-          <ComposeMsg />
+          <ComposeMsg composeMsg = {this.composeMsg}/>
           <MessageList
             msg = {this.state.selection}
             check = {this.check}

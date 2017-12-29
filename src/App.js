@@ -28,7 +28,7 @@ class App extends Component {
     const subject = e.target.subject.value
     const body = e.target.subject.value
     if(subject && body){
-      const response = await fetch(API, {
+      const response = await fetch('/api/messages', {
         method: 'POST',
         headers: {
         'Content-Type': 'application/json',

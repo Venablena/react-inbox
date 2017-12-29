@@ -125,7 +125,7 @@ class App extends Component {
   }
 
   async componentDidMount(){
-    const posts = await fetch(API)
+    const posts = await fetch('/api/messages')
     const response = await posts.json()
     const data = response._embedded.messages
     data.map(el => el.checked = false)

@@ -8,8 +8,6 @@ import Toolbar from './components/Toolbar.js'
 import MessageList from './components/MessageList.js'
 import ComposeMsg from './components/ComposeMsg.js'
 
-const API = 'http://localhost:8082/api/messages'
-
 class App extends Component {
   constructor(props){
     super(props)
@@ -116,7 +114,7 @@ class App extends Component {
     }
     if(command !== "delete") body = Object.assign({}, body, value)
     console.log(body);
-    await fetch(API, {
+    await fetch('/api/messages', {
       method: 'PATCH',
       headers: {
       'Content-Type': 'application/json',

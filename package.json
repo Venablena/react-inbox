@@ -15,5 +15,5 @@
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   },
-  "proxy": "https://inbox-server.herokuapp.com/"
+  "proxy": "https://inbox-server.herokuapp.com"
 }

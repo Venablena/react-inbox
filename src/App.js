@@ -8,6 +8,8 @@ import Toolbar from './components/Toolbar.js'
 import MessageList from './components/MessageList.js'
 import ComposeMsg from './components/ComposeMsg.js'
 
+const URL = 'https://inbox-server.herokuapp.com'
+
 class App extends Component {
   constructor(props){
     super(props)
@@ -26,7 +28,7 @@ class App extends Component {
     const subject = e.target.subject.value
     const body = e.target.subject.value
     if(subject && body){
-      const response = await fetch('/api/messages', {
+      const response = await fetch(`${URL}/api/messages`, {
         method: 'POST',
         headers: {
         'Content-Type': 'application/json',
@@ -114,7 +116,7 @@ class App extends Component {
     }
     if(command !== "delete") body = Object.assign({}, body, value)
     console.log(body);
-    await fetch('/api/messages', {
+    await fetch(`${URL}/api/messages`, {
       method: 'PATCH',
       headers: {
       'Content-Type': 'application/json',
@@ -125,7 +127,7 @@ class App extends Component {
   }
 
   async componentDidMount(){
-    const posts = await fetch('/api/messages')
+    const posts = await fetch(`${URL}/api/messages`)
     const response = await posts.json()
     const data = response._embedded.messages
     data.map(el => el.checked = false)

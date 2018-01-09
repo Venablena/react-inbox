@@ -40,7 +40,6 @@ class App extends Component {
       const posts = Object.assign({}, this.state)
       posts.selection.push(newMsg)
       posts.compose = false
-      console.log(this.state);
       this.setState(posts)
     }
   }

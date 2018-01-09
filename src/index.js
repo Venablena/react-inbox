@@ -7,5 +7,23 @@ import './index.css';
 import App from './App';
 import registerServiceWorker from './registerServiceWorker';
 
-ReactDOM.render(<App />, document.getElementById('root'));
+//CONVERT TO REDUX
+import { Provider } from 'react-redux'
+import { createStore, applyMiddleWare } from './redux'
+import reducers from './reducers'
+
+const store = createStore(
+  reducers
+  //applyMiddleWare would go here
+)
+
+//store.dispatch(fetchMyStuff())
+
+ReactDOM.render(
+  <Provider store={store}>
+    <App />
+  </Provider>
+  , document.getElementById('root')
+);
+
 registerServiceWorker();

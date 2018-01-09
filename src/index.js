@@ -9,7 +9,7 @@ import registerServiceWorker from './registerServiceWorker';
 
 //CONVERT TO REDUX
 import { Provider } from 'react-redux'
-import { createStore, applyMiddleWare } from './redux'
+import { createStore, applyMiddleWare } from 'redux'
 import reducers from './reducers'
 
 const store = createStore(

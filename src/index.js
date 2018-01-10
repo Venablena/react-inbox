@@ -10,14 +10,17 @@ import registerServiceWorker from './registerServiceWorker';
 //CONVERT TO REDUX
 import { Provider } from 'react-redux'
 import { createStore, applyMiddleWare } from 'redux'
-import reducers from './reducers'
 
+import reducers from './reducers'
+import { fetchMessages } from './actions'
+
+//????
 const store = createStore(
   reducers
   //applyMiddleWare would go here
 )
 
-//store.dispatch(fetchMyStuff())
+store.dispatch(fetchMessages())
 
 ReactDOM.render(
   <Provider store={store}>

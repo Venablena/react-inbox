@@ -8,18 +8,23 @@ import App from './App';
 import registerServiceWorker from './registerServiceWorker';
 
 //CONVERT TO REDUX
+//Redux elements:
 import { Provider } from 'react-redux'
-import { createStore, applyMiddleWare } from 'redux'
-
+import { createStore, applyMiddleware } from 'redux'
+import logger from 'redux-logger'
+import thunkMiddleWare from 'redux-thunk'
+//My reducers and actions:
 import reducers from './reducers'
 import { fetchMessages } from './actions'
 
-//????
 const store = createStore(
-  reducers
-  //applyMiddleWare would go here
+  reducers,
+  applyMiddleware(
+    thunkMiddleWare,
+    logger
+  )
 )
-
+console.log(store.getState());
 store.dispatch(fetchMessages())
 
 ReactDOM.render(

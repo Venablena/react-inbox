@@ -1,4 +1,5 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
+import { connect } from 'react-redux'
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/css/bootstrap-theme.css';
 import 'font-awesome/css/font-awesome.css';
@@ -8,11 +9,16 @@ import Toolbar from './components/Toolbar.js'
 import MessageList from './components/MessageList.js'
 import ComposeMsg from './components/ComposeMsg.js'
 
+import {
+  fetchMessages
+} from './actions'
+
 const URL = 'https://inbox-server.herokuapp.com'
 
 class App extends Component {
-  constructor(){
-    super()
+  constructor(props){
+    super(props)
+
     this.state = {
       selection: [],
       compose: false
@@ -125,26 +131,19 @@ class App extends Component {
     })
   }
 
-  async componentDidMount(){
-    const posts = await fetch(`${URL}/api/messages`)
-    const response = await posts.json()
-    const data = response._embedded.messages
-    data.map(el => el.checked = false)
-    this.setState({selection: data})
-  }
-
-//same without async, in promise format:
-  // componentDidMount(){
-  //   fetch('http://localhost:8082/api/messages')
-  //     .then((result) => {
-  //       console.log(result)
-  //       result.json().then(response => {
-  //         console.log(response)
-  //       })
-  //     })
+  componentDidMount() {
+      this.props.fetchMessages()
+    }
+  // async componentDidMount(){
+  //   const posts = await fetch(`${URL}/api/messages`)
+  //   const response = await posts.json()
+  //   const data = response._embedded.messages
+  //   data.map(el => el.checked = false)
+  //   this.setState({selection: data})
   // }
 
   render() {
+    console.log(this.props);
     return (
       <div className="App">
         <header className="App-header">
@@ -164,7 +163,7 @@ class App extends Component {
             composeMsg = {this.composeMsg}
             isActive = {this.state.compose}/>
           <MessageList
-            msg = {this.state.selection}
+            msg = {this.props.selection}
             check = {this.check}
             />
         </div>
@@ -173,4 +172,14 @@ class App extends Component {
   }
 }
 
-export default App;
+function stateToProps(state){
+  return {
+  selection: state.renderMessages,
+  compose: state.compose}
+}
+
+const dispatchToProps = dispatch => ({
+  fetchMessages: () => fetchMessages(dispatch)
+  })
+
+export default connect(stateToProps, dispatchToProps)(App);

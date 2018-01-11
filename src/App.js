@@ -59,21 +59,24 @@ class App extends Component {
     this.setState(posts)
   }
 
-  check = (msgId, action) => {
-    const posts = this.state.messages
-    //find a post
-    const match = posts.find(el => el.id === msgId)
-    //mark it checked/unchecked OR read/unread
-    match[action] ? match[action] = false : match[action] = true
-    //update on the server(only if starred):
-    if(match && action === "starred"){
-      this.updateDb([msgId], "star", {"star": match[action]})
-    }
-    //update state:
-    const newmessages = [...posts.slice(0, posts.indexOf(match)), match, ...posts.slice(posts.indexOf(match)+1)]
-
-    this.setState({messages:newmessages})
+  check = (msgId) => {
+    this.props.toggleCheck(msgId)
   }
+  // check = (msgId, action) => {
+  //   const posts = this.state.messages
+  //   //find a post
+  //   const match = posts.find(el => el.id === msgId)
+  //   //mark it checked/unchecked OR read/unread
+  //   match[action] ? match[action] = false : match[action] = true
+  //   //update on the server(only if starred):
+  //   if(match && action === "starred"){
+  //     this.updateDb([msgId], "star", {"star": match[action]})
+  //   }
+  //   //update state:
+  //   const newmessages = [...posts.slice(0, posts.indexOf(match)), match, ...posts.slice(posts.indexOf(match)+1)]
+  //
+  //   this.setState({messages:newmessages})
+  // }
 
   trash = async(msgId) => {
     //copy current state

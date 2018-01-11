@@ -26,10 +26,11 @@ export function toggleCompose() {
   }
 }
 
-export function toggleCheck() {
+export function toggleCheck(id) {
   return (dispatch) => {
     dispatch({
-      type: CHECK_ONE
+      type: CHECK_ONE,
+      id
     })
   }
 }

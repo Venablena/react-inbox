@@ -15,7 +15,7 @@ const Message = ({msg, check}) => {
         <div className = "row">
           <div className="col-6">
             <input type="checkbox"
-              onChange= {()=>{check(msg.id, "checked")}}
+              onChange= {()=>{check(msg.id)}}
               checked = {msg.checked}
               />
           </div>

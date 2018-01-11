@@ -14,6 +14,9 @@ const INITIAL_STATE = []
         return [...action.messages]
       case CHECK_ONE :
         return state.map(msg => {
+          //map all non-matching messages into a new array as they are
+          if(msg.id !== action.id) return msg
+          //exception for the msg with a matching id: toggle its checked property
           if(!msg.checked) return {...msg, checked: true}
           return {...msg, checked: false}
         })
@@ -22,12 +25,12 @@ const INITIAL_STATE = []
     }
   }
 
-  function compose(state = false, action){
+  export function compose(state = false, action){
     switch (action.type) {
       case TOGGLE_COMPOSE :
         return !state
       default:
-       return state
+        return state
     }
   }
 

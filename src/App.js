@@ -12,7 +12,8 @@ import ComposeMsg from './components/ComposeMsg.js'
 import {
   fetchMessages,
   toggleCheck,
-  toggleCompose
+  toggleCompose,
+  checkAll
 } from './actions'
 
 const URL = 'https://inbox-server.herokuapp.com'
@@ -54,9 +55,7 @@ class App extends Component {
   }
 
   allChecked = () => {
-    let posts = Object.assign({}, this.state)
-    posts.messages.every(el => el.checked) ? posts.messages.map(el => el.checked = false) : posts.messages.map(el => el.checked = true)
-    this.setState(posts)
+    this.props.checkAll()
   }
 
   check = (msgId) => {
@@ -72,11 +71,6 @@ class App extends Component {
   //   if(match && action === "starred"){
   //     this.updateDb([msgId], "star", {"star": match[action]})
   //   }
-  //   //update state:
-  //   const newmessages = [...posts.slice(0, posts.indexOf(match)), match, ...posts.slice(posts.indexOf(match)+1)]
-  //
-  //   this.setState({messages:newmessages})
-  // }
 
   trash = async(msgId) => {
     //copy current state
@@ -181,7 +175,8 @@ function stateToProps(state){
 const dispatchToProps = dispatch => ({
   fetchMessages: () => fetchMessages(dispatch),
   toggleCompose: () => toggleCompose()(dispatch),
-  toggleCheck: (id) => toggleCheck(id) (dispatch)
+  toggleCheck: (id) => toggleCheck(id) (dispatch),
+  checkAll: () => checkAll()(dispatch)
 })
 
 export default connect(stateToProps, dispatchToProps)(App);

@@ -3,6 +3,7 @@ const URL = 'https://inbox-server.herokuapp.com'
 export const ALL_MESSAGES = 'ALL_MESSAGES'
 export const TOGGLE_COMPOSE = 'TOGGLE_COMPOSE'
 export const CHECK_ONE = 'CHECK_ONE'
+export const CHECK_ALL = 'CHECK_ALL'
 
 export const fetchMessages = () => {
   return async (dispatch) => {
@@ -18,7 +19,7 @@ export const fetchMessages = () => {
   }
 }
 
-export function toggleCompose() {
+export const toggleCompose = () => {
   return (dispatch) => {
     dispatch({
       type: TOGGLE_COMPOSE
@@ -26,11 +27,20 @@ export function toggleCompose() {
   }
 }
 
-export function toggleCheck(id) {
+export const toggleCheck = (id) => {
   return (dispatch) => {
     dispatch({
       type: CHECK_ONE,
       id
+    })
+  }
+}
+
+
+export const checkAll = () => {
+  return (dispatch) => {
+    dispatch({
+      type: CHECK_ALL
     })
   }
 }

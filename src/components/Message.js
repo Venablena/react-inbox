@@ -21,7 +21,7 @@ const Message = ({msg, check}) => {
           </div>
           <div className="col-6">
             <i onClick={()=>{check(msg.id, "starred")}}
-              className= {msg.starred ? "star fa fa-star" : "star fa fa-star-o" }>
+              className= {"star fa fa-star" + (msg.starred ?  "" : "-o")}>
             </i>
           </div>
         </div>

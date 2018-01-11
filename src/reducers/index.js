@@ -1,7 +1,8 @@
 import { combineReducers } from 'redux'
 import {
   ALL_MESSAGES,
-  TOGGLE_COMPOSE
+  TOGGLE_COMPOSE,
+  CHECK_ONE
 } from '../actions'
 //selection is ALL messages, not just selected, fyi
 const INITIAL_STATE = []
@@ -10,8 +11,13 @@ const INITIAL_STATE = []
 
     switch (action.type) {
       case ALL_MESSAGES :
-        return [...action.selection]
-      default :
+        return [...action.messages]
+      case CHECK_ONE :
+        return state.map(msg => {
+          if(!msg.checked) return {...msg, checked: true}
+          return {...msg, checked: false}
+        })
+      default:
         return state
     }
   }

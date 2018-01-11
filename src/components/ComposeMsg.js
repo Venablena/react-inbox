@@ -3,7 +3,7 @@ import React from 'react';
 const ComposeMsg = ({composeMsg, isActive}) => {
 
   return (
-    <form className={isActive ? "form-horizontal well" : "form-horizontal well d-none"} onSubmit={composeMsg}>
+    <form className={"form-horizontal well" + (isActive ? "" : " d-none")} onSubmit={composeMsg}> 
       <div className="form-group">
         <div className="col-sm-8 col-sm-offset-2">
           <h4>Compose Message</h4>

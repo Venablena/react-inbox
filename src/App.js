@@ -10,7 +10,9 @@ import MessageList from './components/MessageList.js'
 import ComposeMsg from './components/ComposeMsg.js'
 
 import {
-  fetchMessages
+  fetchMessages,
+  toggleCheck,
+  toggleCompose
 } from './actions'
 
 const URL = 'https://inbox-server.herokuapp.com'
@@ -20,13 +22,14 @@ class App extends Component {
     super(props)
 
     this.state = {
-      selection: [],
+      messages: [],
       compose: false
     }
   }
 
-  enableCompose = () => {
-    this.state.compose ? this.setState({compose: false}) : this.setState({compose: true})
+  enableCompose = (e) => {
+    e.preventDefault()
+    this.props.toggleCompose()
   }
 
   composeMsg = async(e) => {
@@ -44,7 +47,7 @@ class App extends Component {
       })
       const newMsg = await response.json()
       const posts = Object.assign({}, this.state)
-      posts.selection.push(newMsg)
+      posts.messages.push(newMsg)
       posts.compose = false
       this.setState(posts)
     }
@@ -52,12 +55,12 @@ class App extends Component {
 
   allChecked = () => {
     let posts = Object.assign({}, this.state)
-    posts.selection.every(el => el.checked) ? posts.selection.map(el => el.checked = false) : posts.selection.map(el => el.checked = true)
+    posts.messages.every(el => el.checked) ? posts.messages.map(el => el.checked = false) : posts.messages.map(el => el.checked = true)
     this.setState(posts)
   }
 
   check = (msgId, action) => {
-    const posts = this.state.selection
+    const posts = this.state.messages
     //find a post
     const match = posts.find(el => el.id === msgId)
     //mark it checked/unchecked OR read/unread
@@ -67,19 +70,19 @@ class App extends Component {
       this.updateDb([msgId], "star", {"star": match[action]})
     }
     //update state:
-    const newSelection = [...posts.slice(0, posts.indexOf(match)), match, ...posts.slice(posts.indexOf(match)+1)]
+    const newmessages = [...posts.slice(0, posts.indexOf(match)), match, ...posts.slice(posts.indexOf(match)+1)]
 
-    this.setState({selection:newSelection})
+    this.setState({messages:newmessages})
   }
 
   trash = async(msgId) => {
     //copy current state
     const posts = Object.assign({}, this.state)
     //remove all selected posts from the db
-    const id = this.state.selection.filter(el => el.checked).map(el => el.id)
+    const id = this.state.messages.filter(el => el.checked).map(el => el.id)
     this.updateDb(id, "delete")
     //remove all selected posts from the state
-    posts.selection.filter(el => el.checked).forEach(el =>{ posts.selection.splice(posts.selection.indexOf(el),1)
+    posts.messages.filter(el => el.checked).forEach(el =>{ posts.messages.splice(posts.messages.indexOf(el),1)
     })
     //update state
     this.setState(posts)
@@ -87,29 +90,29 @@ class App extends Component {
 
   markRead = (value) => {
     let posts = Object.assign({}, this.state)
-    posts.selection.filter(el => el.checked).map(el => el.read = value)
-    const id = this.state.selection.filter(el => el.checked).map(el => el.id)
+    posts.messages.filter(el => el.checked).map(el => el.read = value)
+    const id = this.state.messages.filter(el => el.checked).map(el => el.id)
     this.updateDb(id, "read", {"read": value})
     this.setState(posts)
   }
 
   removeLabels = (e) => {
     let posts = Object.assign({}, this.state)
-    posts.selection.filter(el => el.checked).forEach(el => {
+    posts.messages.filter(el => el.checked).forEach(el => {
       const idx = el.labels.indexOf(e.target.value)
       if(idx >= 0)el.labels.splice(idx, 1)
     })
-    const id = this.state.selection.filter(el => el.checked).map(el => el.id)
+    const id = this.state.messages.filter(el => el.checked).map(el => el.id)
     this.updateDb(id, "removeLabel", {"label": e.target.value})
     this.setState(posts)
   }
 
   addLabels = (e) => {
     let posts = Object.assign({}, this.state)
-    posts.selection.filter(el => el.checked).forEach(el => {
+    posts.messages.filter(el => el.checked).forEach(el => {
       if(!el.labels.includes(e.target.value))el.labels.push(e.target.value)
     })
-    const id = this.state.selection.filter(el => el.checked).map(el => el.id)
+    const id = this.state.messages.filter(el => el.checked).map(el => el.id)
     this.updateDb(id, "addLabel", {"label": e.target.value})
     this.setState(posts)
   }
@@ -134,16 +137,9 @@ class App extends Component {
   componentDidMount() {
       this.props.fetchMessages()
     }
-  // async componentDidMount(){
-  //   const posts = await fetch(`${URL}/api/messages`)
-  //   const response = await posts.json()
-  //   const data = response._embedded.messages
-  //   data.map(el => el.checked = false)
-  //   this.setState({selection: data})
-  // }
 
   render() {
-    console.log(this.props);
+
     return (
       <div className="App">
         <header className="App-header">
@@ -152,7 +148,7 @@ class App extends Component {
         </header>
         <div className="container">
           <Toolbar
-            msg = {this.state.selection}
+            msg = {this.props.messages}
             trash = {this.trash}
             markRead = {this.markRead}
             checkAll = {this.allChecked}
@@ -161,9 +157,9 @@ class App extends Component {
             compose = {this.enableCompose}/>
           <ComposeMsg
             composeMsg = {this.composeMsg}
-            isActive = {this.state.compose}/>
+            isActive = {this.props.compose}/>
           <MessageList
-            msg = {this.props.selection}
+            msg = {this.props.messages}
             check = {this.check}
             />
         </div>
@@ -174,12 +170,15 @@ class App extends Component {
 
 function stateToProps(state){
   return {
-  selection: state.renderMessages,
-  compose: state.compose}
+    messages: state.renderMessages,
+    compose: state.compose
+  }
 }
 
 const dispatchToProps = dispatch => ({
-  fetchMessages: () => fetchMessages(dispatch)
-  })
+  fetchMessages: () => fetchMessages(dispatch),
+  toggleCompose: () => toggleCompose()(dispatch),
+  toggleCheck: (id) => toggleCheck(id) (dispatch)
+})
 
 export default connect(stateToProps, dispatchToProps)(App);

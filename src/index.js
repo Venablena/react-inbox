@@ -24,7 +24,7 @@ const store = createStore(
     logger
   )
 )
-console.log(store.getState());
+
 store.dispatch(fetchMessages())
 
 ReactDOM.render(

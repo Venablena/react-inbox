@@ -6,10 +6,22 @@ const checkboxState = (msg) => {
   else return "fa fa-square-o"
 }
 
+const Toolbar = ({
+  msg,
+  trash,
+  checkAll,
+  removeLabels,
+  addLabels,
+  compose,
+  markRead,
+  markUnread
+}) => {
 
+  const checkedMsg = msg.filter(el => el.checked === true)
 
-const Toolbar = ({msg, markRead, trash, checkAll, removeLabels, addLabels, compose}) => {
+  const msgIds = checkedMsg.map(el => el.id)
 
+console.log('msgIds:' + msgIds);
   return (
     <div className="row toolbar">
       <div className="col-md-12">
@@ -28,12 +40,12 @@ const Toolbar = ({msg, markRead, trash, checkAll, removeLabels, addLabels, compo
           </i>
         </button>
 
-        <button className="btn btn-default" onClick = {()=>{markRead(true)}}
-        disabled = {msg.filter(el => el.checked).every(el => el.read)}>
+        <button className="btn btn-default" onClick = {()=>{markRead(msgIds)}}
+        disabled = {checkedMsg.every(el => el.read)}>
           Mark As Read
         </button>
 
-        <button className="btn btn-default" onClick = {()=>{markRead(false)}} disabled = {msg.filter(el => el.checked).every(el => !el.read)}>
+        <button className="btn btn-default" onClick = {()=>{markUnread(msgIds)}} disabled =  {checkedMsg.every(el => !el.read)}>
           Mark As Unread
         </button>
 

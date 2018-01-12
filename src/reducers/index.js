@@ -3,7 +3,10 @@ import {
   ALL_MESSAGES,
   TOGGLE_COMPOSE,
   CHECK_ONE,
-  CHECK_ALL
+  CHECK_ALL,
+  TOGGLE_STAR,
+  MARK_READ,
+  MARK_UNREAD
 } from '../actions'
 //selection is ALL messages, not just selected, fyi
 const INITIAL_STATE = []
@@ -27,6 +30,29 @@ const INITIAL_STATE = []
         return state.map(msg => {
           if(!msg.checked) return {...msg, checked: true}
           return {...msg, checked: false}
+        })
+
+      case TOGGLE_STAR :
+        return state.map(msg => {
+          if(msg.id !== action.id) return msg
+          if(!msg.starred) return {...msg, starred: true}
+          return {...msg, starred: false}
+        })
+
+      case MARK_READ :
+      console.log('state in reducer:' + state)
+      console.log('action.id in reducer:' + action.id);;
+        return state.map(msg => {
+          if(!action.id.includes(msg.id)) return msg
+          return {...msg, read: true}
+        })
+
+      case MARK_UNREAD :
+      console.log('state in reducer:' + state)
+      console.log('action.id in reducer:' + action.id);;
+        return state.map(msg => {
+          if(!action.id.includes(msg.id)) return msg
+          return {...msg, read: false}
         })
 
       default:

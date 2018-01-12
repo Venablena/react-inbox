@@ -7,7 +7,7 @@ const rowName = (msg) => {
   return name
 }
 
-const Message = ({msg, check}) => {
+const Message = ({msg, check, toggleStar}) => {
 
   return (
     <div  className= {rowName(msg)}>
@@ -20,7 +20,7 @@ const Message = ({msg, check}) => {
               />
           </div>
           <div className="col-6">
-            <i onClick={()=>{check(msg.id, "starred")}}
+            <i onClick={()=>{toggleStar(msg.id, msg.starred)}}
               className= {"star fa fa-star" + (msg.starred ?  "" : "-o")}>
             </i>
           </div>

@@ -9,12 +9,18 @@ import Toolbar from './components/Toolbar.js'
 import MessageList from './components/MessageList.js'
 import ComposeMsg from './components/ComposeMsg.js'
 
+import { bindActionCreators } from 'redux'
+
 import {
   fetchMessages,
   toggleCheck,
   toggleCompose,
-  checkAll
+  checkAll,
+  toggleStar,
+  markRead,
+  markUnread
 } from './actions'
+
 
 const URL = 'https://inbox-server.herokuapp.com'
 
@@ -61,16 +67,10 @@ class App extends Component {
   check = (msgId) => {
     this.props.toggleCheck(msgId)
   }
-  // check = (msgId, action) => {
-  //   const posts = this.state.messages
-  //   //find a post
-  //   const match = posts.find(el => el.id === msgId)
-  //   //mark it checked/unchecked OR read/unread
-  //   match[action] ? match[action] = false : match[action] = true
-  //   //update on the server(only if starred):
-  //   if(match && action === "starred"){
-  //     this.updateDb([msgId], "star", {"star": match[action]})
-  //   }
+
+  toggleStar = (msgId, starred) => {
+    this.props.toggleStar(msgId, starred)
+  }
 
   trash = async(msgId) => {
     //copy current state
@@ -85,12 +85,12 @@ class App extends Component {
     this.setState(posts)
   }
 
-  markRead = (value) => {
-    let posts = Object.assign({}, this.state)
-    posts.messages.filter(el => el.checked).map(el => el.read = value)
-    const id = this.state.messages.filter(el => el.checked).map(el => el.id)
-    this.updateDb(id, "read", {"read": value})
-    this.setState(posts)
+  markRead = (id) => {
+    this.props.markRead(id)
+  }
+
+  markUnread = (id) => {
+    this.props.markUnread(id)
   }
 
   removeLabels = (e) => {
@@ -100,8 +100,8 @@ class App extends Component {
       if(idx >= 0)el.labels.splice(idx, 1)
     })
     const id = this.state.messages.filter(el => el.checked).map(el => el.id)
-    this.updateDb(id, "removeLabel", {"label": e.target.value})
-    this.setState(posts)
+    // this.updateDb(id, "removeLabel", {"label": e.target.value})
+    // this.setState(posts)
   }
 
   addLabels = (e) => {
@@ -110,26 +110,11 @@ class App extends Component {
       if(!el.labels.includes(e.target.value))el.labels.push(e.target.value)
     })
     const id = this.state.messages.filter(el => el.checked).map(el => el.id)
-    this.updateDb(id, "addLabel", {"label": e.target.value})
-    this.setState(posts)
+    // this.updateDb(id, "addLabel", {"label": e.target.value})
+    // this.setState(posts)
   }
 
-  async updateDb(id, command, value){
-    let body = {
-      "messageIds": id,
-      "command": command
-    }
-    if(command !== "delete") body = Object.assign({}, body, value)
-    console.log(body);
-    await fetch(`${URL}/api/messages`, {
-      method: 'PATCH',
-      headers: {
-      'Content-Type': 'application/json',
-      'Accept': 'application/json',
-      },
-      body: JSON.stringify(body)
-    })
-  }
+
 
   componentDidMount() {
       this.props.fetchMessages()
@@ -147,17 +132,19 @@ class App extends Component {
           <Toolbar
             msg = {this.props.messages}
             trash = {this.trash}
-            markRead = {this.markRead}
             checkAll = {this.allChecked}
             removeLabels = {this.removeLabels}
             addLabels = {this.addLabels}
-            compose = {this.enableCompose}/>
+            compose = {this.enableCompose}
+            markRead = {this.markRead}
+            markUnread = {this.markUnread}/>
           <ComposeMsg
             composeMsg = {this.composeMsg}
             isActive = {this.props.compose}/>
           <MessageList
             msg = {this.props.messages}
             check = {this.check}
+            toggleStar = {this.toggleStar}
             />
         </div>
       </div>
@@ -172,11 +159,14 @@ function stateToProps(state){
   }
 }
 
-const dispatchToProps = dispatch => ({
-  fetchMessages: () => fetchMessages(dispatch),
-  toggleCompose: () => toggleCompose()(dispatch),
-  toggleCheck: (id) => toggleCheck(id) (dispatch),
-  checkAll: () => checkAll()(dispatch)
-})
+const dispatchToProps = dispatch => bindActionCreators({
+  fetchMessages,
+  toggleCompose,
+  toggleCheck,
+  checkAll,
+  toggleStar,
+  markRead,
+  markUnread
+}, dispatch)
 
 export default connect(stateToProps, dispatchToProps)(App);

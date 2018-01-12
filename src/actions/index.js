@@ -1,9 +1,31 @@
-const URL = 'https://inbox-server.herokuapp.com'
+const URL = 'http://localhost:8082'
 
 export const ALL_MESSAGES = 'ALL_MESSAGES'
 export const TOGGLE_COMPOSE = 'TOGGLE_COMPOSE'
 export const CHECK_ONE = 'CHECK_ONE'
 export const CHECK_ALL = 'CHECK_ALL'
+export const TOGGLE_STAR = 'TOGGLE_STAR'
+export const MARK_READ = 'MARK_READ'
+export const MARK_UNREAD = 'MARK_UNREAD'
+export const DELETE = 'DELETE'
+
+const updateDb = async (id, command, value) => {
+  console.log('updateDB-id:', id);
+  let body = {
+    "messageIds": id,
+    "command": command
+  }
+  if(command !== "delete") body = Object.assign({}, body, value)
+  console.log(body);
+  await fetch(`${URL}/api/messages`, {
+    method: 'PATCH',
+    headers: {
+    'Content-Type': 'application/json',
+    'Accept': 'application/json',
+    },
+    body: JSON.stringify(body)
+  })
+}
 
 export const fetchMessages = () => {
   return async (dispatch) => {
@@ -36,7 +58,6 @@ export const toggleCheck = (id) => {
   }
 }
 
-
 export const checkAll = () => {
   return (dispatch) => {
     dispatch({
@@ -45,43 +66,34 @@ export const checkAll = () => {
   }
 }
 
-/*export const composeMsg = (e) => {
-  e.preventDefault()
+export const toggleStar = (id, starred) => {
   return async (dispatch) => {
-    const subject = e.target.subject.value
-    const body = e.target.subject.value
-    if(subject && body){
-     const response = await fetch(`${URL}/api/messages`, {
-       method: 'POST',
-       headers: {
-       'Content-Type': 'application/json',
-       'Accept': 'application/json',
-       },
-       body: JSON.stringify({subject, body})
-     })
-     const newMsg = await response.json()
-     const posts = Object.assign({}, this.state)
-     posts.selection.push(newMsg)
-     posts.compose = false
-     this.setState(posts)
-   }
+    updateDb([id], "star", {"star": !starred})
+    dispatch({
+      type: TOGGLE_STAR,
+      id
+    })
   }
 }
- ACTIONS
-async updateDb(id, command, value){
-  let body = {
-    "messageIds": id,
-    "command": command
+
+export const markRead = (id) => {
+  console.log('action.id in actions:' + id)
+  return async (dispatch) => {
+    updateDb(id, "read", {"read": true})
+    dispatch({
+      type: MARK_READ,
+      id
+    })
   }
-  if(command !== "delete") body = Object.assign({}, body, value)
-  console.log(body);
-  await fetch(`${URL}/api/messages`, {
-    method: 'PATCH',
-    headers: {
-    'Content-Type': 'application/json',
-    'Accept': 'application/json',
-    },
-    body: JSON.stringify(body)
-  })
 }
-*/
+
+export const markUnread = (id) => {
+  console.log('action.id in actions:' + id)
+  return async (dispatch) => {
+    updateDb(id, "read", {"read": false})
+    dispatch({
+      type: MARK_UNREAD,
+      id
+    })
+  }
+}

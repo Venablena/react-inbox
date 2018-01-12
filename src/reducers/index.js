@@ -6,7 +6,8 @@ import {
   CHECK_ALL,
   TOGGLE_STAR,
   MARK_READ,
-  MARK_UNREAD
+  MARK_UNREAD,
+  TRASH
 } from '../actions'
 //selection is ALL messages, not just selected, fyi
 const INITIAL_STATE = []
@@ -40,20 +41,19 @@ const INITIAL_STATE = []
         })
 
       case MARK_READ :
-      console.log('state in reducer:' + state)
-      console.log('action.id in reducer:' + action.id);;
         return state.map(msg => {
           if(!action.id.includes(msg.id)) return msg
           return {...msg, read: true}
         })
 
       case MARK_UNREAD :
-      console.log('state in reducer:' + state)
-      console.log('action.id in reducer:' + action.id);;
         return state.map(msg => {
           if(!action.id.includes(msg.id)) return msg
           return {...msg, read: false}
         })
+
+      case TRASH :
+      return state.filter(msg => !action.id.includes(msg.id))
 
       default:
         return state

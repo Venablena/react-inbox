@@ -21,7 +21,6 @@ const Toolbar = ({
 
   const msgIds = checkedMsg.map(el => el.id)
 
-console.log('msgIds:' + msgIds);
   return (
     <div className="row toolbar">
       <div className="col-md-12">
@@ -63,7 +62,7 @@ console.log('msgIds:' + msgIds);
           <option value="gschool">gschool</option>
         </select>
 
-        <button className="btn btn-default" onClick = {()=>{trash(msg.id)}} disabled = {!msg.some(el => el.checked)}>
+        <button className="btn btn-default" onClick = {()=>{trash(msgIds)}} disabled = {!msg.some(el => el.checked)}>
           <i className="fa fa-trash-o"></i>
         </button>
       </div>

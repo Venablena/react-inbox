@@ -18,7 +18,8 @@ import {
   checkAll,
   toggleStar,
   markRead,
-  markUnread
+  markUnread,
+  trash
 } from './actions'
 
 
@@ -72,25 +73,16 @@ class App extends Component {
     this.props.toggleStar(msgId, starred)
   }
 
-  trash = async(msgId) => {
-    //copy current state
-    const posts = Object.assign({}, this.state)
-    //remove all selected posts from the db
-    const id = this.state.messages.filter(el => el.checked).map(el => el.id)
-    this.updateDb(id, "delete")
-    //remove all selected posts from the state
-    posts.messages.filter(el => el.checked).forEach(el =>{ posts.messages.splice(posts.messages.indexOf(el),1)
-    })
-    //update state
-    this.setState(posts)
+  trash = (msgIds) => {
+    this.props.trash(msgIds)
   }
 
-  markRead = (id) => {
-    this.props.markRead(id)
+  markRead = (ids) => {
+    this.props.markRead(ids)
   }
 
-  markUnread = (id) => {
-    this.props.markUnread(id)
+  markUnread = (ids) => {
+    this.props.markUnread(ids)
   }
 
   removeLabels = (e) => {
@@ -131,7 +123,7 @@ class App extends Component {
         <div className="container">
           <Toolbar
             msg = {this.props.messages}
-            trash = {this.trash}
+            trash = {this.props.trash}
             checkAll = {this.allChecked}
             removeLabels = {this.removeLabels}
             addLabels = {this.addLabels}
@@ -166,7 +158,8 @@ const dispatchToProps = dispatch => bindActionCreators({
   checkAll,
   toggleStar,
   markRead,
-  markUnread
+  markUnread,
+  trash
 }, dispatch)
 
 export default connect(stateToProps, dispatchToProps)(App);

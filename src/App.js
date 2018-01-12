@@ -19,7 +19,9 @@ import {
   toggleStar,
   markRead,
   markUnread,
-  trash
+  trash,
+  addLabels,
+  removeLabels
 } from './actions'
 
 
@@ -28,11 +30,6 @@ const URL = 'https://inbox-server.herokuapp.com'
 class App extends Component {
   constructor(props){
     super(props)
-
-    this.state = {
-      messages: [],
-      compose: false
-    }
   }
 
   enableCompose = (e) => {
@@ -86,27 +83,22 @@ class App extends Component {
   }
 
   removeLabels = (e) => {
-    let posts = Object.assign({}, this.state)
-    posts.messages.filter(el => el.checked).forEach(el => {
-      const idx = el.labels.indexOf(e.target.value)
-      if(idx >= 0)el.labels.splice(idx, 1)
-    })
-    const id = this.state.messages.filter(el => el.checked).map(el => el.id)
-    // this.updateDb(id, "removeLabel", {"label": e.target.value})
-    // this.setState(posts)
+    const label = e.target.value
+    let ids = this.props.messages
+      .filter(message => message.checked)
+      .filter(message => message.labels.includes(label))
+      .map(message => message.id)
+    this.props.removeLabels(ids, label)
   }
 
   addLabels = (e) => {
-    let posts = Object.assign({}, this.state)
-    posts.messages.filter(el => el.checked).forEach(el => {
-      if(!el.labels.includes(e.target.value))el.labels.push(e.target.value)
-    })
-    const id = this.state.messages.filter(el => el.checked).map(el => el.id)
-    // this.updateDb(id, "addLabel", {"label": e.target.value})
-    // this.setState(posts)
+    const label = e.target.value
+    let ids = this.props.messages
+      .filter(message => message.checked)
+      .filter(message => !message.labels.includes(label))
+      .map(message => message.id)
+    this.props.addLabels(ids, label)
   }
-
-
 
   componentDidMount() {
       this.props.fetchMessages()
@@ -159,7 +151,9 @@ const dispatchToProps = dispatch => bindActionCreators({
   toggleStar,
   markRead,
   markUnread,
-  trash
+  trash,
+  addLabels,
+  removeLabels
 }, dispatch)
 
 export default connect(stateToProps, dispatchToProps)(App);

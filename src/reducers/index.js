@@ -7,7 +7,9 @@ import {
   TOGGLE_STAR,
   MARK_READ,
   MARK_UNREAD,
-  TRASH
+  TRASH,
+  ADD_LABELS,
+  REMOVE_LABELS
 } from '../actions'
 //selection is ALL messages, not just selected, fyi
 const INITIAL_STATE = []
@@ -53,7 +55,23 @@ const INITIAL_STATE = []
         })
 
       case TRASH :
-      return state.filter(msg => !action.id.includes(msg.id))
+        return state.filter(msg => !action.id.includes(msg.id))
+
+      case ADD_LABELS:
+        return state.map(msg => {
+          if((action.id.includes(msg.id)) && (!msg.labels.includes(action.label))) {
+            return { ...msg, labels: [...msg.labels, action.label]}
+          } else return msg
+        })
+
+      case REMOVE_LABELS:
+        return state.map(msg => {
+          if((action.id.includes(msg.id)) && (msg.labels.includes(action.label))) {
+            let newLabels = msg.labels.filter(label => label !== action.label)
+            return { ...msg, labels: newLabels }
+          } else return msg
+        })
+
 
       default:
         return state

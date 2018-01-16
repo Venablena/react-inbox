@@ -1,4 +1,4 @@
-const URL = 'http://localhost:8082'
+const URL = 'https://inbox-server.herokuapp.com'
 
 export const ALL_MESSAGES = 'ALL_MESSAGES'
 export const TOGGLE_COMPOSE = 'TOGGLE_COMPOSE'

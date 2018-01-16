@@ -25,9 +25,6 @@ import {
   sendMsg
 } from './actions'
 
-
-const URL = 'https://inbox-server.herokuapp.com'
-
 class App extends Component {
 
   enableCompose = (e) => {

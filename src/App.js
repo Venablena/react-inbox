@@ -21,38 +21,27 @@ import {
   markUnread,
   trash,
   addLabels,
-  removeLabels
+  removeLabels,
+  sendMsg
 } from './actions'
 
 
 const URL = 'https://inbox-server.herokuapp.com'
 
 class App extends Component {
-  
+
   enableCompose = (e) => {
     e.preventDefault()
     this.props.toggleCompose()
   }
 
-  composeMsg = async(e) => {
+  sendMsg = (e) => {
     e.preventDefault()
     const subject = e.target.subject.value
-    const body = e.target.subject.value
-    if(subject && body){
-      const response = await fetch(`${URL}/api/messages`, {
-        method: 'POST',
-        headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-        },
-        body: JSON.stringify({subject, body})
-      })
-      const newMsg = await response.json()
-      const posts = Object.assign({}, this.state)
-      posts.messages.push(newMsg)
-      posts.compose = false
-      this.setState(posts)
-    }
+    const body = e.target.body.value
+    if(subject && body)this.props.sendMsg(subject, body)
+    else alert('Fill in the subject and body!')
+    this.props.toggleCompose()
   }
 
   allChecked = () => {
@@ -98,8 +87,8 @@ class App extends Component {
   }
 
   componentDidMount() {
-      this.props.fetchMessages()
-    }
+    this.props.fetchMessages()
+  }
 
   render() {
 
@@ -121,7 +110,7 @@ class App extends Component {
             markRead = {this.markRead}
             markUnread = {this.markUnread}/>
           <ComposeMsg
-            composeMsg = {this.composeMsg}
+            sendMsg = {this.sendMsg}
             isActive = {this.props.compose}/>
           <MessageList
             msg = {this.props.messages}
@@ -134,7 +123,7 @@ class App extends Component {
   }
 }
 
-function stateToProps(state){
+const stateToProps = (state) => {
   return {
     messages: state.renderMessages,
     compose: state.compose
@@ -151,7 +140,8 @@ const dispatchToProps = dispatch => bindActionCreators({
   markUnread,
   trash,
   addLabels,
-  removeLabels
+  removeLabels,
+  sendMsg
 }, dispatch)
 
 export default connect(stateToProps, dispatchToProps)(App);

@@ -1,7 +1,6 @@
 import { combineReducers } from 'redux'
 import {
   ALL_MESSAGES,
-  TOGGLE_COMPOSE,
   CHECK_ONE,
   CHECK_ALL,
   TOGGLE_STAR,
@@ -9,7 +8,9 @@ import {
   MARK_UNREAD,
   TRASH,
   ADD_LABELS,
-  REMOVE_LABELS
+  REMOVE_LABELS,
+  TOGGLE_COMPOSE,
+  SEND_MESSAGE
 } from '../actions'
 
 const INITIAL_STATE = []
@@ -71,6 +72,9 @@ const INITIAL_STATE = []
             return { ...msg, labels: newLabels }
           } else return msg
         })
+
+      case SEND_MESSAGE:
+        return [...state, action.post]
 
       default:
         return state

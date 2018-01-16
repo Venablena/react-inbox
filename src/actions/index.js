@@ -10,15 +10,16 @@ export const MARK_UNREAD = 'MARK_UNREAD'
 export const TRASH = 'TRASH'
 export const REMOVE_LABELS = 'REMOVE_LABELS'
 export const ADD_LABELS = 'ADD_LABELS'
+export const SEND_MESSAGE = 'SEND_MESSAGE'
 
 const updateDb = async (id, command, value) => {
-  console.log('updateDB-id:', id);
+
   let body = {
     "messageIds": id,
     "command": command
   }
   if(command !== "delete") body = Object.assign({}, body, value)
-  console.log(body);
+
   await fetch(`${URL}/api/messages`, {
     method: 'PATCH',
     headers: {
@@ -27,6 +28,24 @@ const updateDb = async (id, command, value) => {
     },
     body: JSON.stringify(body)
   })
+}
+
+export const sendMsg = (subject, body) => {
+  return async (dispatch) => {
+    const response = await fetch(`${URL}/api/messages`, {
+      method: 'POST',
+      headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      },
+      body: JSON.stringify({subject, body})
+    })
+    const newMsg = await response.json()
+    dispatch({
+      type: SEND_MESSAGE,
+      post: newMsg
+    })
+  }
 }
 
 export const fetchMessages = () => {

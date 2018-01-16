@@ -28,10 +28,7 @@ import {
 const URL = 'https://inbox-server.herokuapp.com'
 
 class App extends Component {
-  constructor(props){
-    super(props)
-  }
-
+  
   enableCompose = (e) => {
     e.preventDefault()
     this.props.toggleCompose()
@@ -119,7 +116,8 @@ class App extends Component {
             checkAll = {this.allChecked}
             removeLabels = {this.removeLabels}
             addLabels = {this.addLabels}
-            compose = {this.enableCompose}
+            enableCompose = {this.enableCompose}
+            composeOn = {this.props.compose}
             markRead = {this.markRead}
             markUnread = {this.markUnread}/>
           <ComposeMsg

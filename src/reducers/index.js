@@ -11,7 +11,7 @@ import {
   ADD_LABELS,
   REMOVE_LABELS
 } from '../actions'
-//selection is ALL messages, not just selected, fyi
+
 const INITIAL_STATE = []
 
   export function renderMessages(state = INITIAL_STATE, action){
@@ -71,7 +71,6 @@ const INITIAL_STATE = []
             return { ...msg, labels: newLabels }
           } else return msg
         })
-
 
       default:
         return state

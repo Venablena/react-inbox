@@ -12,7 +12,8 @@ const Toolbar = ({
   checkAll,
   removeLabels,
   addLabels,
-  compose,
+  enableCompose,
+  composeOn,
   markRead,
   markUnread
 }) => {
@@ -29,8 +30,8 @@ const Toolbar = ({
           {msg.filter(el => !el.read).length === 1 ? "new message" : "new messages"}
         </p>
 
-        <a className="btn btn-danger" onClick={compose}>
-         <i className="fa fa-plus"></i>
+        <a className={"btn" + (composeOn ? " btn-default" : " btn-danger")} onClick={enableCompose}>
+         <i className={"fa" + (composeOn ? " fa-times" : " fa-plus")}></i>
        </a>
 
         <button className="btn btn-default">
